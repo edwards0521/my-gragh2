@@ -120,3 +120,44 @@ st.dataframe(
     use_container_width=True,
     hide_index=True
 )
+# -----------------------------------
+# 그래프 2. 장르별 영화 트리맵
+# -----------------------------------
+st.divider()
+st.header("2. 장르 안에 들어 있는 영화")
+
+# 총 관객 수를 숫자로 변환
+df["total_audi"] = pd.to_numeric(
+    df["total_audi"],
+    errors="coerce"
+).fillna(0)
+
+fig2 = px.treemap(
+    df,
+    path=["genre", "movieNm"],
+    values="total_audi",
+    title="장르별 영화의 총 관객 규모"
+)
+
+fig2.update_traces(
+    hovertemplate=(
+        "<b>%{label}</b><br>"
+        "총 관객: %{value:,.0f}명"
+        "<extra></extra>"
+    )
+)
+
+fig2.update_layout(
+    height=650
+)
+
+st.plotly_chart(
+    fig2,
+    use_container_width=True
+)
+
+st.info(
+    "💡 이 그래프로 알 수 있는 것: "
+    "각 장르 안에서 어떤 영화가 많은 관객을 모았는지와 "
+    "영화별 총 관객 규모의 차이를 비교할 수 있습니다."
+)
