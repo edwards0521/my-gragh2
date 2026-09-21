@@ -106,8 +106,7 @@ fig.update_layout(
 
 st.plotly_chart(fig, use_container_width=True)
 
-st.info("💡 이 그래프로 알 수 있는 것:"  "영화 장르 중 어떤 장르가 가장 많은 비중을 차지하고, "
-    "어떤 장르가 적은 비중을 차지하는지 알 수 있습니다.")
+st.info("💡 이 그래프로 알 수 있는 것:"  "어떤 장르의 영화가 가장 많이 제작되었고, 어떤 장르가 적은지 알 수 있습니다.")
 
 # -----------------------------------
 # 원본 데이터 일부 확인
@@ -158,8 +157,7 @@ st.plotly_chart(
 
 st.info(
     "💡 이 그래프로 알 수 있는 것: "
-    "각 장르 안에서 어떤 영화가 많은 관객을 모았는지와 "
-    "영화별 총 관객 규모의 차이를 비교할 수 있습니다."
+ "같은 장르 안에서도 영화마다 총 관객 수에 큰 차이가 있다는 것을 알 수 있습니다."
 )
 # -----------------------------------
 # 그래프 3. 총 관객 히스토그램
@@ -440,33 +438,33 @@ st.info(
     "전체적인 구성을 비교할 수 있습니다."
 )
 # ==============================
-# 8. 10위권에 오래 머문 영화는 총 관객도 많은가
+# 8. 첫 주 관객이 많은 영화는 최종 관객 수도 많을까?
 # ==============================
 
 st.divider()
-st.header("8. 10위권에 오래 머문 영화는 총 관객도 많은가")
+st.header("8. 첫 주 관객이 많은 영화는 최종 관객 수도 많을까?")
 
 # 숫자형으로 변환
-df["days_in_top10"] = pd.to_numeric(
-    df["days_in_top10"],
+df["first_week_audi"] = pd.to_numeric(
+    df["first_week_audi"],
     errors="coerce"
-).fillna(0)
+)
 
 df["total_audi"] = pd.to_numeric(
     df["total_audi"],
     errors="coerce"
-).fillna(0)
+)
 
 # 산점도
 fig8 = px.scatter(
     df,
-    x="days_in_top10",
+    x="first_week_audi",
     y="total_audi",
     color="genre",
     hover_name="movieNm",
-    title="10위권에 오래 머문 영화는 총 관객도 많은가",
+    title="첫 주 관객이 많은 영화는 최종 관객 수도 많을까?",
     labels={
-        "days_in_top10": "10위권에 머문 날수",
+        "first_week_audi": "첫 주 관객 수",
         "total_audi": "총 관객 수",
         "genre": "장르"
     }
@@ -476,7 +474,7 @@ fig8.update_traces(
     marker=dict(size=10),
     hovertemplate=(
         "<b>%{hovertext}</b><br>"
-        "10위권에 머문 날수: %{x:,.0f}일<br>"
+        "첫 주 관객: %{x:,.0f}명<br>"
         "총 관객: %{y:,.0f}명"
         "<extra></extra>"
     )
@@ -484,18 +482,18 @@ fig8.update_traces(
 
 fig8.update_layout(
     height=600,
-    xaxis_title="10위권에 머문 날수",
+    xaxis_title="첫 주 관객 수",
     yaxis_title="총 관객 수"
 )
 
 st.plotly_chart(
     fig8,
     use_container_width=True,
-    key="graph8_scatter"
+    key="graph8_firstweek_scatter"
 )
 
 st.info(
     "💡 이 그래프로 알 수 있는 것: "
-    "영화가 10위권에 머문 날수와 총 관객 수 사이에 어떤 관계가 있는지 "
-    "살펴볼 수 있습니다."
+    "영화의 첫 주 관객 수와 최종 총 관객 수가 어떤 관계가 있는지 "
+    "비교할 수 있습니다."
 )
